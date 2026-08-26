@@ -1,8 +1,8 @@
 {
-  "name": "@popcateumdex/sdk",
+  "name": "@raptordex/sdk",
   "license": "MIT",
   "version": "0.0.1",
-  "description": "🛠 An SDK for building applications on top of popcateumdex.",
+  "description": "🛠 An SDK for building applications on top of raptor.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
