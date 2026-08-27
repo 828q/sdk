@@ -13,7 +13,6 @@ var toFormat = _interopDefault(require('toformat'));
 var _Decimal = _interopDefault(require('decimal.js-light'));
 var solidity = require('@ethersproject/solidity');
 var contracts = require('@ethersproject/contracts');
-var networks = require('@ethersproject/networks');
 var providers = require('@ethersproject/providers');
 
 var _FACTORY_ADDRESS_MAP, _INIT_CODE_HASH_MAP, _SOLIDITY_TYPE_MAXIMA;
@@ -2242,6 +2241,8 @@ var ERC20 = [
 ];
 
 var _TOKEN_DECIMALS_CACHE;
+var RAPTORCAIN_RPC = 'https://rpc.raptorchain.io/web3';
+var raptorChainProvider = /*#__PURE__*/new providers.JsonRpcProvider(RAPTORCAIN_RPC, 1380996178);
 var TOKEN_DECIMALS_CACHE = (_TOKEN_DECIMALS_CACHE = {}, _TOKEN_DECIMALS_CACHE[exports.ChainId.MAINNET] = {
   '0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A': 9 // DGD
 
@@ -2266,14 +2267,16 @@ var Fetcher = /*#__PURE__*/function () {
 
 
   Fetcher.fetchTokenData = function fetchTokenData(chainId, address, provider, symbol, name) {
+    if (provider === void 0) {
+      provider = raptorChainProvider;
+    }
+
     try {
       var _TOKEN_DECIMALS_CACHE2, _TOKEN_DECIMALS_CACHE3;
 
       var _temp3 = function _temp3(parsedDecimals) {
         return new Token(chainId, address, parsedDecimals, symbol, name);
       };
-
-      if (provider === undefined) provider = providers.getDefaultProvider(networks.getNetwork(chainId));
 
       var _temp4 = typeof ((_TOKEN_DECIMALS_CACHE2 = TOKEN_DECIMALS_CACHE) === null || _TOKEN_DECIMALS_CACHE2 === void 0 ? void 0 : (_TOKEN_DECIMALS_CACHE3 = _TOKEN_DECIMALS_CACHE2[chainId]) === null || _TOKEN_DECIMALS_CACHE3 === void 0 ? void 0 : _TOKEN_DECIMALS_CACHE3[address]) === 'number';
 
@@ -2296,8 +2299,11 @@ var Fetcher = /*#__PURE__*/function () {
   ;
 
   Fetcher.fetchPairData = function fetchPairData(tokenA, tokenB, provider) {
+    if (provider === void 0) {
+      provider = raptorChainProvider;
+    }
+
     try {
-      if (provider === undefined) provider = providers.getDefaultProvider(networks.getNetwork(tokenA.chainId));
       !(tokenA.chainId === tokenB.chainId) ? "development" !== "production" ? invariant(false, 'CHAIN_ID') : invariant(false) : void 0;
       var address = Pair.getAddress(tokenA, tokenB);
       return Promise.resolve(new contracts.Contract(address, IPancakePair, provider).getReserves()).then(function (_ref) {
